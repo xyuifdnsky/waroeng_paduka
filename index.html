@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Waroeng Paduka</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <!-- Styles -->
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+    }
+
+    header.navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1f1f1f;
+      padding: 20px 10%;
+      color: white;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .logo span {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-menu ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-menu ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 400;
+    }
+
+    .cart-icon {
+      margin-left: 20px;
+      cursor: pointer;
+    }
+
+    section {
+      display: none;
+      padding: 60px 10%;
+    }
+
+    section#home {
+      display: block;
+      background-color: #f5f5f5;
+    }
+
+    .home-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .home-content {
+      flex: 1;
+      padding-right: 40px;
+    }
+
+    .home-content h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .home-content span {
+      color: #c0392b;
+      font-weight: 700;
+    }
+
+    .home-image {
+      flex: 1;
+      text-align: center;
+    }
+
+    .home-image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+
+    .btn-home {
+      display: inline-block;
+      background-color: #c0392b;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+
+    .menu-section, .about-section, .contact-section {
+      text-align: center;
+    }
+
+    .menu-items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .menu-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      width: 280px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .menu-card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .menu-card h3 {
+      margin: 15px 0 10px;
+      color: #c0392b;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cart-message {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+
+    .cart-panel {
+      display: none;
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 1001;
+    }
+
+    .cart-panel h4 {
+      margin-top: 0;
+    }
+
+    .cart-item {
+      text-align: left;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+
+    .cart-item:last-child {
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .home-section {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .home-content {
+        padding-right: 0;
+        margin-bottom: 30px;
+      }
+
+      .menu-items {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .menu-card {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">
+      <img src="waroeng.png" alt="Logo Waroeng Paduka">
+      <span>Waroeng Paduka</span>
+    </div>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#" onclick="showSection('home')">Beranda</a></li>
+        <li><a href="#" onclick="showSection('menu')">Menu</a></li>
+        <li><a href="#" onclick="showSection('about')">Tentang</a></li>
+        <li><a href="#" onclick="showSection('contact')">Kontak</a></li>
+        <li><a href="#" onclick="showSection('login')">Login</a></li>
+        <li><a href="#" onclick="logout()" id="logoutBtn" style="display:none;">Logout</a></li>
+
+      </ul>
+      <div class="cart-icon" onclick="toggleCart()">
+        <i data-feather="shopping-cart"></i>
+      </div>
+    </nav>
+  </header>
+
+  <div class="cart-panel" id="cartPanel">
+    <h4>Keranjang Belanja</h4>
+    <div id="cartItems"></div>
+        <div class="cart-actions">
+          <label for="payment-method">Pilih Metode Pembayaran:</label><br><br>
+          <select id="payment-method">
+            <option value="">-- Pilih --</option>
+            <option value="DANA">DANA</option>
+            <option value="BRI">BRI Transfer</option>
+            <option value="OVO">OVO</option>
+            <option value="ShopeePay">ShopeePay</option>
+            <option value="BCA">BCA Transfer</option>
+            <option value="GoPay">GoPay</option>
+            <option value="eWallet">eWallet Lainnya</option>
+            <option value="Tunai">Bayar Tunai</option>
+          </select><br><br>
+          <button onclick="payWithSelected()">Bayar Sekarang</button>
+        </div>
+        </div>
+  </div>
+
+  <!-- SECTION: Home -->
+  <section id="home" class="home-section">
+    <div class="home-content">
+      <h2>Selamat Datang di <span>Waroeng Paduka</span></h2>
+      <p>Dapatkan promo menarik dari Grand Opening nanti pada Semester 3.</p>
+      <a href="#" onclick="showSection('menu')" class="btn-home">Lihat Menu</a>
+    </div>
+    <div class="home-image">
+      <img src="images/hero-waroeng.png" alt="Hero Image" />
+    </div>
+  </section>
+
+  <!-- SECTION: Menu -->
+  <section id="menu" class="menu-section">
+    <h2>Menu Unggulan</h2>
+    <div class="menu-items">
+      <div class="menu-card" onclick="openModal('Nasi Goreng Paduka', '13000')">
+        <img src="images/nasgor.jpg" alt="Nasi Goreng Paduka" />
+        <h3>Nasi Goreng Paduka</h3>
+        <p>Nasi goreng khas dengan bumbu rempah rahasia dari kerajaan Paduka.</p>
+      </div>
+      <div class="menu-card" onclick="openModal('Rice Bowl Paduka', '15000')">
+        <img src="images/rice.jpg" alt="Rice Bowl Paduka" />
+        <h3>Rice Bowl Paduka</h3>
+        <p>Rice Bowl Ayam Sambel Ijo.</p>
+      </div>
+      <div class="menu-card" onclick="openModal('Salad Sehat Paduka', '12000')">
+        <img src="images/saladsehat.jpg" alt="Salad Sehat Paduka" />
+        <h3>Salad Sehat Paduka</h3>
+        <p>Salad sehat dan segar di panen dari kebun pilihan paduka.</p>
+      </div>
+      <div class="menu-card" onclick="openModal('Seblak Paduka', '15000')">
+        <img src="images/seblak.jpg" alt="Seblak Paduka" />
+        <h3>Seblak Paduka</h3>
+        <p>Seblak kuah pedas khas Cibogo.</p>
+      </div>
+
+          <div class="menu-card" onclick="openModal('Mie Jebew', '13000')">
+        <img src="https://static.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/2023/08/13/Mie-jebew-2064933235.jpg" alt="Mie Jebew" />
+        <h3>Mie Jebew</h3>
+        <p>Mie pedas dengan bumbu rahasia.</p>
+      </div>
+      <div class="menu-card" onclick="openModal('........', '...........')">
+        <img src="..................jpg" alt=".............." />
+        <h3>..........</h3>
+        <p>....................</p>
+      </div>
+      
+
+    </div>
+    <div class="cart-panel" id="cartPanel">
+  <h4>Keranjang Belanja</h4>
+  <div id="cartItems"></div>
+  <div class="payment-summary" id="paymentSummary"></div>
+ 
+  <div class="cart-panel" id="cartPanel">
+  <h4>Keranjang Belanja</h4>
+  <div id="cartItems"></div>
+  <div class="payment-summary" id="paymentSummary"></div>
+ 
+  
+  </section>
+
+  <!-- SECTION: Tentang -->
+  <section id="about" class="about-section">
+    <h2>Tentang Kami</h2>
+    <p>Masakan autentik dengan bahan segar dan resep turun-temurun.</p>
+  </section>
+
+  <!-- SECTION: Kontak -->
+  <section id="contact" class="contact-section">
+    <h2>Kontak</h2>
+    <p>Hubungi kami di Instagram <strong>@waroengpaduka</strong></p>
+  </section>
+
+  <!-- SECTION: Login -->
+<section id="login" class="contact-section">
+  <h2>Login</h2>
+  <input type="text" id="login-username" placeholder="Username" /><br /><br />
+  <input type="password" id="login-password" placeholder="Password" /><br /><br />
+  <button onclick="login()">Login</button>
+  <p>Belum punya akun? <a href="#" onclick="showSection('signup')">Daftar</a></p>
+</section>
+
+<!-- SECTION: Sign Up -->
+<section id="signup" class="contact-section">
+  <h2>Sign Up</h2>
+  <input type="text" id="signup-username" placeholder="Username" /><br /><br />
+  <input type="password" id="signup-password" placeholder="Password" /><br /><br />
+  <button onclick="signup()">Daftar</button>
+  <p>Sudah punya akun? <a href="#" onclick="showSection('login')">Login</a></p>
+</section>
+
+
+  <!-- Modal Produk -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeModal()">&times;</span>
+      <h3 id="modal-title"></h3>
+      <p>Harga: Rp <span id="modal-price"></span></p>
+      <label>Jumlah:</label>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+        <button onclick="updateQuantity(-1)">−</button>
+        <input type="number" id="modal-quantity" value="1" min="1" style="width: 50px; text-align: center;" readonly />
+        <button onclick="updateQuantity(1)">+</button>
+      </div>
+      <p>Total: Rp <span id="modal-total"></span></p>
+      <button class="btn-home" onclick="confirmAddToCart()">Tambah ke Keranjang</button>
+    </div>
+  </div>
+
+  <script>
+    feather.replace();
+
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll("section");
+      sections.forEach(section => section.style.display = "none");
+      const selected = document.getElementById(sectionId);
+      if (selected) selected.style.display = "block";
+    }
+
+    const cart = [];
+
+    function toggleCart() {
+      const panel = document.getElementById("cartPanel");
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
+      renderCart();
+    }
+
+    function addToCart(title, quantity, price) {
+      const item = { title, quantity, price: parseInt(price.replace(/[^\d]/g, '')) };
+      cart.push(item);
+      alert("Ditambahkan ke keranjang!");
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItems = document.getElementById("cartItems");
+      cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <strong>${item.title}</strong><br>
+          Jumlah: ${item.quantity}<br>
+          Total: Rp ${(item.quantity * item.price).toLocaleString("id-ID")}
+        </div>
+      `).join("");
+    }
+
+    let currentProduct = { title: "", price: 0 };
+
+    function openModal(title, price) {
+      currentProduct = { title, price: parseInt(price) };
+      document.getElementById("modal-title").textContent = title;
+      document.getElementById("modal-price").textContent = price;
+      document.getElementById("modal-quantity").value = 1;
+      document.getElementById("modal-total").textContent = price;
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function updateQuantity(change) {
+      const qtyInput = document.getElementById("modal-quantity");
+      let qty = parseInt(qtyInput.value) + change;
+      if (qty < 1) qty = 1;
+      qtyInput.value = qty;
+      document.getElementById("modal-total").textContent = (qty * currentProduct.price).toLocaleString("id-ID");
+    }
+
+    function confirmAddToCart() {
+      const qty = parseInt(document.getElementById("modal-quantity").value);
+      addToCart(currentProduct.title, qty, "Rp " + currentProduct.price.toLocaleString("id-ID"));
+      closeModal();
+    }
+
+    function renderCart() {
+  const cartItems = document.getElementById("cartItems");
+  const summary = document.getElementById("paymentSummary");
+  if (cart.length === 0) {
+    cartItems.innerHTML = '<p>Keranjang kosong.</p>';
+    summary.textContent = '';
+    return;
+  }
+  cartItems.innerHTML = cart.map((item, index) => `
+    <div class="cart-item">
+      <strong>${item.title}</strong>
+      <span class="remove-btn" onclick="removeFromCart(${index})">&times;</span><br>
+      Jumlah: ${item.quantity}<br>
+      Total: Rp ${(item.quantity * item.price).toLocaleString("id-ID")}
+    </div>
+  `).join("");
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  summary.textContent = `Total Bayar: Rp ${total.toLocaleString("id-ID")}`;
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  renderCart();
+}
+
+function pay(method) {
+  if (cart.length === 0) {
+    alert("Keranjang masih kosong.");
+    return;
+  }
+  const methodText = method === "digital" ? "Uang Digital" : "Tunai";
+  alert(`Pembayaran dengan metode ${methodText} berhasil. Terima kasih!`);
+  cart.length = 0;
+  renderCart();
+  toggleCart();
+
+}
+
+function payWithSelected() {
+  if (cart.length === 0) {
+    alert("Keranjang masih kosong.");
+    return;
+  }
+
+  const selectedMethod = document.getElementById("payment-method").value;
+
+  if (!selectedMethod) {
+    alert("Silakan pilih metode pembayaran terlebih dahulu.");
+    return;
+  }
+
+  let message = `Pembayaran dengan metode ${selectedMethod} berhasil.\nTerima kasih sudah berbelanja di Waroeng Paduka!`;
+
+  // Jika pakai transfer, tampilkan nomor rekening atau kode pembayaran
+  if (["BRI", "BCA"].includes(selectedMethod)) {
+    message += `\n\nSilakan transfer ke rekening:\n${selectedMethod} - 1234567890 a.n. Waroeng Paduka`;
+  } else if (["DANA", "OVO", "GoPay", "ShopeePay", "eWallet"].includes(selectedMethod)) {
+    message += `\n\nSilakan scan QR atau kirim ke nomor:\n083876696960`;
+  }
+
+  alert(message);
+  cart.length = 0;
+  renderCart();
+  toggleCart();
+}
+
+let currentUser = localStorage.getItem("loggedInUser");
+
+function signup() {
+  const user = document.getElementById("signup-username").value;
+  const pass = document.getElementById("signup-password").value;
+  if (!user || !pass) return alert("Isi semua data!");
+
+  const users = JSON.parse(localStorage.getItem("users") || "{}");
+  if (users[user]) return alert("Username sudah terdaftar.");
+
+  users[user] = pass;
+  localStorage.setItem("users", JSON.stringify(users));
+  alert("Berhasil daftar! Silakan login.");
+  showSection("login");
+}
+
+function login() {
+  const user = document.getElementById("login-username").value;
+  const pass = document.getElementById("login-password").value;
+
+  const users = JSON.parse(localStorage.getItem("users") || "{}");
+  if (users[user] && users[user] === pass) {
+    alert("Login berhasil!");
+    localStorage.setItem("loggedInUser", user);
+    currentUser = user;
+    document.getElementById("logoutBtn").style.display = "inline";
+    showSection("home");
+  } else {
+    alert("Username atau password salah!");
+  }
+}
+
+function logout() {
+  localStorage.removeItem("loggedInUser");
+  currentUser = null;
+  alert("Berhasil logout!");
+  document.getElementById("logoutBtn").style.display = "none";
+  showSection("login");
+}
+
+// Tampilkan tombol logout jika sudah login
+window.onload = () => {
+  if (currentUser) {
+    document.getElementById("logoutBtn").style.display = "inline";
+  }
+};
+
+  </script>
+</body>
+</html>
